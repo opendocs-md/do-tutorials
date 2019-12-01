@@ -46,11 +46,14 @@ The `.do_to_md` script has a number of options to help batch convert and process
 
 This will create a new Markdown file with the converted content of the original tutorial. (If this is an HTML tutorial that has not already been included in this repository, you could at this point also consider submitting a pull request to add it to the repo.)
 
+To run the script you will need the [kramdown](https://kramdown.gettalong.org/) and [reverse_markdown](https://github.com/xijo/reverse_markdown) gems.
+
 Available options for the script:
 
 * `-b`, `--batch`: _Batch process all files in HTML directory_
 * `-f`, `--filename FILE`: _Convert single HTML file to Markdown and print to STDOUT_
 * `-h`, `--help`: _Print help message listing these options_
+* `-i`, `--index`: _Generate index of all articles_
 * `-j`, `--json`: _Print JSON metadata from original HTML file_
 * `-l`, `--local-images`: _Convert remote image links to local ones_
 * `-r`, `--remote-images`: _Convert local image links to remote ones_
@@ -73,4 +76,8 @@ Nevertheless, if you notice any tutorials that are missing, please feel free to 
 
 ## License
 
-All of the content in this repository has been released under a [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/) license by Digital Ocean.
+All of the tutorial content in this repository has been released under a [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/) license by Digital Ocean.
+
+Scripts and other code: MIT.
+
+CSS: [Water CSS](https://github.com/kognise/water.css) by @kognise
