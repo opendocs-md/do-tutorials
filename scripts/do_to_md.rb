@@ -177,7 +177,9 @@ def generate_index
   docs = "../docs/"
   FileUtils.mkdir_p docs
   File.open(docs + "index.md", "w") {|f| f << "# DO Tutorials Index\n" + index }
-  $content = Kramdown::Document.new(index).to_html
+  repo_base = "https://github.com/opendocs-md/do-tutorials/blob/master/md/"
+  index_links = index.gsub(/\.\.\/md\//, repo_base)
+  $content = Kramdown::Document.new(index_links).to_html
   html_out = ERB.new(File.read("template.rhtml")).result
   File.open(docs + "index.html", "w") {|f| f << html_out }
 end
