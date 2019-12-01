@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'json'
+require 'kramdown'
 require 'optparse'
 require 'reverse_markdown'
 
@@ -158,12 +159,36 @@ def remote_images
   end
 end
 
+def generate_index
+  files = Dir.glob("../md/**/*.md")
+  lang = ""
+  index = ""
+  files.sort.each do |filepath|
+    basename = File.basename(filepath)
+    content = File.read(filepath)
+    l = File.split(File.absolute_path(filepath))[0].split("/").last
+    if l != lang
+      index << "\n## " + l + "\n\n"
+      lang = l
+    end
+    /^# (?<title>.*)$/ =~ content
+    index << "* [#{title}](#{filepath})\n"
+  end
+  docs = "../docs/"
+  FileUtils.mkdir_p docs
+  File.open(docs + "index.md", "w") {|f| f << "# DO Tutorials Index\n" + index }
+  $content = Kramdown::Document.new(index).to_html
+  html_out = ERB.new(File.read("template.rhtml")).result
+  File.open(docs + "index.html", "w") {|f| f << html_out }
+end
+
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: do_to_md.rb [options]"
 
   opts.on("-b", "--batch", "Batch process all files in HTML directory") { options[:batch] = true }
   opts.on("-f", "--filename FILE", "Convert single HTML file to Markdown and print to STDOUT") { |v| options[:filename] = v }
+  opts.on("-i", "--index", "Generate index of all articles") { options[:index] = true }
   opts.on("-j", "--json", "Print JSON metadata") { options[:json] = true }
   opts.on("-l", "--local-images", "Convert remote image links to local ones") { options[:local] = true }
   opts.on("-r", "--remote-images", "Convert local image links to remote ones") { options[:remote] = true }
@@ -180,6 +205,8 @@ elsif options[:local]
   local_images
 elsif options[:remote]
   remote_images
+elsif options[:index]
+  generate_index
 else
   abort("  Please provide at least one commandline option.")
 end
